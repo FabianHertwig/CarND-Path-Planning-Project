@@ -3,28 +3,28 @@
 //
 
 
-#include "path.h"
+#include "Path.h"
 
 using namespace std;
 
 
-path::path(const vector<double> &map_waypoints_x, const vector<double> &map_waypoints_y) : map_waypoints_x(
+Path::Path(const vector<double> &map_waypoints_x, const vector<double> &map_waypoints_y) : map_waypoints_x(
         map_waypoints_x), map_waypoints_y(map_waypoints_y) {}
 
-const vector<double> &path::getMap_waypoints_x() const {
+const vector<double> &Path::getMap_waypoints_x() const {
     return map_waypoints_x;
 }
 
-void path::setMap_waypoints_x(const vector<double> &map_waypoints_x) {
-    path::map_waypoints_x = map_waypoints_x;
+void Path::setMap_waypoints_x(const vector<double> &map_waypoints_x) {
+    Path::map_waypoints_x = map_waypoints_x;
 }
 
-const vector<double> &path::getMap_waypoints_y() const {
+const vector<double> &Path::getMap_waypoints_y() const {
     return map_waypoints_y;
 }
 
-void path::setMap_waypoints_y(const vector<double> &map_waypoints_y) {
-    path::map_waypoints_y = map_waypoints_y;
+void Path::setMap_waypoints_y(const vector<double> &map_waypoints_y) {
+    Path::map_waypoints_y = map_waypoints_y;
 }
 
 double distance(double x1, double y1, double x2, double y2) {

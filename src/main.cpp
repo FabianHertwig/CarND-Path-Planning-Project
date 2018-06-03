@@ -8,6 +8,8 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 
+#include "Path_planner.h"
+
 using namespace std;
 
 // for convenience
@@ -30,6 +32,8 @@ string hasData(string s) {
 
 int main() {
     uWS::Hub h;
+
+    Path_planner pathPlanner;
 
     // Load up map values for waypoint's x,y,s and d normalized normal vectors
     vector<double> map_waypoints_x;
@@ -65,7 +69,7 @@ int main() {
         map_waypoints_dy.push_back(d_y);
     }
 
-    h.onMessage([&map_waypoints_x, &map_waypoints_y, &map_waypoints_s, &map_waypoints_dx, &map_waypoints_dy](
+    h.onMessage([&map_waypoints_x, &map_waypoints_y, &map_waypoints_s, &map_waypoints_dx, &map_waypoints_dy, &pathPlanner](
             uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
             uWS::OpCode opCode) {
         // "42" at the start of the message means there's a websocket message event.
@@ -93,10 +97,10 @@ int main() {
                     double car_yaw = j[1]["yaw"];
                     double car_speed = j[1]["speed"];
 
-                    // Previous path data given to the Planner
+                    // Previous Path data given to the Planner
                     auto previous_path_x = j[1]["previous_path_x"];
                     auto previous_path_y = j[1]["previous_path_y"];
-                    // Previous path's end s and d values
+                    // Previous Path's end s and d values
                     double end_path_s = j[1]["end_path_s"];
                     double end_path_d = j[1]["end_path_d"];
 
@@ -109,9 +113,11 @@ int main() {
                     vector<double> next_y_vals;
 
 
-                    // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
-                    msgJson["next_x"] = next_x_vals;
-                    msgJson["next_y"] = next_y_vals;
+                    // TODO: define a Path made up of (x,y) points that the car will visit sequentially every .02 seconds
+                    Path path = pathPlanner.get_straight_path(car_x, car_y, car_yaw);
+
+                    msgJson["next_x"] = path.getMap_waypoints_x();
+                    msgJson["next_y"] = path.getMap_waypoints_y();
 
                     auto msg = "42[\"control\"," + msgJson.dump() + "]";
 

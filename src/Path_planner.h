@@ -6,12 +6,15 @@
 #define PATH_PLANNING_PATH_PLANNER_H
 
 #include <math.h>
-#include "path.h"
+#include "Path.h"
 
 using namespace std;
 
-class path_planner {
+class Path_planner {
 
+
+public:
+    Path get_straight_path(double car_x, double car_y, double car_yaw);
 };
 
 

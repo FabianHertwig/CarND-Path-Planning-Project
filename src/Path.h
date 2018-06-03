@@ -17,13 +17,13 @@
 
 using namespace std;
 
-class path {
+class Path {
 
     vector<double> map_waypoints_x;
     vector<double> map_waypoints_y;
 
 public:
-    path(const vector<double> &map_waypoints_x, const vector<double> &map_waypoints_y);
+    Path(const vector<double> &map_waypoints_x, const vector<double> &map_waypoints_y);
 
     const vector<double> &getMap_waypoints_x() const;
 
