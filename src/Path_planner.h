@@ -15,6 +15,7 @@ class Path_planner {
 
 public:
     Path get_straight_path(double car_x, double car_y, double car_yaw);
+    Path get_circular_path(double car_x, double car_y, double car_yaw, const Path &previous_path);
 };
 
 

@@ -100,6 +100,7 @@ int main() {
                     // Previous Path data given to the Planner
                     auto previous_path_x = j[1]["previous_path_x"];
                     auto previous_path_y = j[1]["previous_path_y"];
+                    Path previous_path = Path(previous_path_x, previous_path_y);
                     // Previous Path's end s and d values
                     double end_path_s = j[1]["end_path_s"];
                     double end_path_d = j[1]["end_path_d"];
@@ -109,12 +110,8 @@ int main() {
 
                     json msgJson;
 
-                    vector<double> next_x_vals;
-                    vector<double> next_y_vals;
-
-
                     // TODO: define a Path made up of (x,y) points that the car will visit sequentially every .02 seconds
-                    Path path = pathPlanner.get_straight_path(car_x, car_y, car_yaw);
+                    Path path = pathPlanner.get_circular_path(car_x, car_y, car_yaw, previous_path);
 
                     msgJson["next_x"] = path.getMap_waypoints_x();
                     msgJson["next_y"] = path.getMap_waypoints_y();
