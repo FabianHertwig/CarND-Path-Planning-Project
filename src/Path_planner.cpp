@@ -20,6 +20,25 @@ Path Path_planner::get_straight_path(double car_x, double car_y, double car_yaw)
     return Path(next_x_vals, next_y_vals);
 }
 
+
+Path Path_planner::get_stay_in_lane_path(double car_s, double car_d, Map map) {
+    vector<double> next_x_vals;
+    vector<double> next_y_vals;
+
+    vector<double> next_s_vals;
+    vector<double> next_d_vals;
+
+    double dist_inc = 0.5;
+    for (int i = 0; i < 50; i++) {
+        double s = car_s + (dist_inc * (i + 1));
+        vector<double> xy = getXY(s, car_d, map.getMap_waypoints_s(), map.getMap_waypoints_x(), map.getMap_waypoints_y());
+        next_x_vals.push_back(xy[0]);
+        next_y_vals.push_back(xy[1]);
+    }
+
+    return Path(next_x_vals, next_y_vals);
+}
+
 Path Path_planner::get_circular_path(double car_x, double car_y, double car_yaw, const Path &previous_path) {
     double pos_x;
     double pos_y;
@@ -66,5 +85,6 @@ Path Path_planner::get_circular_path(double car_x, double car_y, double car_yaw,
 
     return Path(next_x_vals, next_y_vals);
 }
+
 
 
