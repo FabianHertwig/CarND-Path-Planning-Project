@@ -25,6 +25,8 @@ class Path {
 public:
     Path(const vector<double> &map_waypoints_x, const vector<double> &map_waypoints_y);
 
+    Path();
+
     const vector<double> &getMap_waypoints_x() const;
 
     void setMap_waypoints_x(const vector<double> &map_waypoints_x);
@@ -32,6 +34,10 @@ public:
     const vector<double> &getMap_waypoints_y() const;
 
     void setMap_waypoints_y(const vector<double> &map_waypoints_y);
+
+    void push_back(const double x_val, const double y_val);
+
+    void shift_to_reference(double x_ref, double y_ref, double yaw_ref);
 
 };
 

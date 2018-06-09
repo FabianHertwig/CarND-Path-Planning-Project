@@ -6,6 +6,7 @@
 #define PATH_PLANNING_TOOLS_H
 
 #include <math.h>
+#include "Map.h"
 
 using namespace std;
 
@@ -110,7 +111,13 @@ static vector<double> getFrenet(double x, double y, double theta, const vector<d
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
 static vector<double>
-getXY(double s, double d, const vector<double> &maps_s, const vector<double> &maps_x, const vector<double> &maps_y) {
+getXY(double s, double d, const Map &map) {
+
+    const vector<double> &maps_s = map.getMap_waypoints_s();
+    const vector<double> &maps_x = map.getMap_waypoints_x();
+    const vector<double> &maps_y = map.getMap_waypoints_y();
+
+
     int prev_wp = -1;
 
     while (s > maps_s[prev_wp + 1] && (prev_wp < (int) (maps_s.size() - 1))) {

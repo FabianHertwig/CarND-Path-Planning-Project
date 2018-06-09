@@ -79,7 +79,8 @@ int main() {
                     json msgJson;
 
                     // TODO: define a Path made up of (x,y) points that the car will visit sequentially every .02 seconds
-                    Path path = pathPlanner.get_stay_in_lane_path(car_s, car_d, map);
+                    Path path = pathPlanner.get_stay_in_lane_path_smooth(car_x, car_y, car_yaw, car_s, car_d, 0, 49.0, previous_path, map);
+
 
                     msgJson["next_x"] = path.getMap_waypoints_x();
                     msgJson["next_y"] = path.getMap_waypoints_y();

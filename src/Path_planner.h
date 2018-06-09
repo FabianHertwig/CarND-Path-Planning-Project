@@ -19,6 +19,9 @@ public:
     Path get_straight_path(double car_x, double car_y, double car_yaw);
     Path get_circular_path(double car_x, double car_y, double car_yaw, const Path &previous_path);
     Path get_stay_in_lane_path(double car_s, double car_d, Map map);
+
+    Path get_stay_in_lane_path_smooth(double car_x, double car_y, double car_yaw, double car_s, double car_d, int lane,
+                                      const double ref_velocity, const Path &previous_path, const Map &map);
 };
 
 
