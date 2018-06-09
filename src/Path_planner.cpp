@@ -85,7 +85,7 @@ Path Path_planner::get_circular_path(double car_x, double car_y, double car_yaw,
 
 
 Path Path_planner::get_stay_in_lane_path_smooth(double car_x, double car_y, double car_yaw, double car_s, double car_d,
-                                                int lane, const double ref_velocity, const Path &previous_path,
+                                                const Path &previous_path,
                                                 const Map &map) {
 
     Path pts;
@@ -120,9 +120,9 @@ Path Path_planner::get_stay_in_lane_path_smooth(double car_x, double car_y, doub
     }
 
     // Create 30m spaced points
-    vector<double> next_wp0 = getXY(car_s + 30, (2 + 4 * lane), map);
-    vector<double> next_wp1 = getXY(car_s + 60, (2 + 4 * lane), map);
-    vector<double> next_wp2 = getXY(car_s + 90, (2 + 4 * lane), map);
+    vector<double> next_wp0 = getXY(car_s + 30, (2 + 4 * current_lane), map);
+    vector<double> next_wp1 = getXY(car_s + 60, (2 + 4 * current_lane), map);
+    vector<double> next_wp2 = getXY(car_s + 90, (2 + 4 * current_lane), map);
 
     pts.push_back(next_wp0[0], next_wp0[1]);
     pts.push_back(next_wp1[0], next_wp1[1]);
@@ -146,7 +146,7 @@ Path Path_planner::get_stay_in_lane_path_smooth(double car_x, double car_y, doub
     double x_add_on = 0.0;
 
     for (int i = 1; i <= 50 - previous_path_size; ++i) {
-        double n = (target_dist / (0.02 * ref_velocity / KMH_TO_MS_FRACTION));
+        double n = (target_dist / (0.02 * current_speed / KMH_TO_MS_FRACTION));
         double x_point = x_add_on + target_x / n;
         double y_point = s(x_point);
 
@@ -167,6 +167,50 @@ Path Path_planner::get_stay_in_lane_path_smooth(double car_x, double car_y, doub
 
     return next_vals;
 
+}
+
+Path_planner::Path_planner(int current_lane, double desired_speed, double current_speed, double acceleration)
+        : current_lane(current_lane), desired_speed(desired_speed), current_speed(current_speed),
+          acceleration(acceleration) {}
+
+void Path_planner::set_speed(double end_path_s, double car_s, double car_d, vector<vector<double>> sensor_fusion) {
+
+    bool car_is_in_front = is_other_car_in_front(car_s, current_lane, sensor_fusion);
+
+    if (car_is_in_front) {
+        current_acceleration = -acceleration;
+    }
+    else if (current_speed < desired_speed) {
+        current_acceleration = acceleration;
+    } else if (current_speed > desired_speed) {
+        current_acceleration = -acceleration;
+    }
+    current_speed += current_acceleration;
+
+}
+
+bool Path_planner::is_other_car_in_front(double car_s, int lane, const vector<vector<double>> &sensor_fusion) const {
+    bool car_is_in_front;
+    for (const auto &other_car : sensor_fusion) {
+        double other_car_d = other_car[6];
+
+        if(is_in_same_lane(other_car_d, lane)){
+            double other_car_vx = other_car[3];
+            double other_car_vy = other_car[4];
+            double other_car_v = sqrt(other_car_vx*other_car_vx + other_car_vy*other_car_vy);
+            double other_car_s = other_car[5];
+
+            if(other_car_s > car_s && (other_car_s - car_s) < safety_distance) {
+                car_is_in_front = true;
+            }
+        }
+    }
+
+    return car_is_in_front;
+}
+
+bool Path_planner::is_in_same_lane(double other_car_d, int lane) const {
+    return other_car_d < (2 + 4 * lane + 2) && other_car_d > (2 + 4 * lane - 2);
 }
 
 
