@@ -65,6 +65,8 @@ Path Path_planner::get_smooth_path(double car_x, double car_y, double car_yaw, d
 
     pts.shift_to_reference(ref_x, ref_y, ref_yaw);
 
+
+    // Fit a spline
     tk::spline s;
     s.set_points(pts.getMap_waypoints_x(), pts.getMap_waypoints_y());
 
@@ -74,6 +76,7 @@ Path Path_planner::get_smooth_path(double car_x, double car_y, double car_yaw, d
         next_vals.push_back(previous_path_x[j], previous_path_y[j]);
     }
 
+    // calculate points on the spline according to the set speed.
     double target_x = 50.0;
     double target_y = s(target_x);
     double target_dist = sqrt(target_x * target_x + target_y * target_y);

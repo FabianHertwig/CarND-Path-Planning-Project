@@ -1,6 +1,10 @@
 # CarND-Path-Planning-Project
-Self-Driving Car Engineer Nanodegree Program
-   
+This is my implementation of the path planning project for the Self-Driving Car Engineer Nanodegree Program.
+
+With this code, the car was able to drive around the track for 45 minutes until I stopped the simulation. The car keeps a distance of 30 meters to other cars in front and switches lanes if it safe to do so.
+
+A documentation of the model is further down in the Readme.
+
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).
 
@@ -63,6 +67,35 @@ the path has processed since last time.
 ## Tips
 
 A really helpful resource for doing this project and creating smooth trajectories was using http://kluge.in-chemnitz.de/opensource/spline/, the spline function is in a single hearder file is really easy to use.
+
+# Model Documentation
+
+## How paths are generated.
+
+The simulator provides coarse waypoints that lead around the track. These waypoints are used to calculate a spline between these waypoints for the next 120 meters. The spline and the current speed information is used to calculate a path of 50 points for the car to follow. To be precise, the path of previous calculations is used and new points are appended. 
+
+These calculations are pretty much the same as described in the class Q&A.
+
+## How speed is calculated.
+In every cycle of the simulator the perfect speed for the car is calculated. If there is no car in front then the car is accelerated until it hits the speed limit. if there is a car in front, then a PID controller is used to keep a distance of 30 meters to the car in front. 
+
+
+## How lane changes happen.
+In every cylce of the simulater the model checks if a car is in front some distance further then the safety distance. If there is a car it checks if there are cars in the lanes next to it. If there are no cars the safety distance in front and a third of the safety distance behind, then the lane will be changed. Then the new lane is set and bacause of the spline fitting a smooth path to the new lane will be calculated.
+
+The car will prefer to switch to the lane on the left. If that is not possible it tries to switch to the right.
+
+The lane changing algorithm could be further improved. Right now it does not check the speed of other cars and if it would be better to switch to a lane where cars are driving faster. So sometimes the car switches to a lane where the car is even slower.
+
+
+## The Code
+I refactored the project code to have objects for paths, the map and a path planner. The path planner is where all the importand calculations are made. In the main method you can see the function calls:
+
+    pathPlanner.set_speed(car_s, sensor_fusion);
+    pathPlanner.consider_switch_lane(car_s, sensor_fusion);
+    Path path = pathPlanner.get_smooth_path(car_x, car_y, car_yaw, car_s, previous_path, map);
+    
+First, the speed is updated based on cars in front. Then the path planner checks if lanes should be switched. Lastly the smooth trajectory for the car to follow is calculated.
 
 ---
 
