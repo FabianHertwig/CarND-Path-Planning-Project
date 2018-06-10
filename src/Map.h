@@ -28,17 +28,12 @@ class Map {
 public:
     Map();
 
-    double getMax_s() const;
-
     const vector<double> &getMap_waypoints_x() const;
 
     const vector<double> &getMap_waypoints_y() const;
 
     const vector<double> &getMap_waypoints_s() const;
 
-    const vector<double> &getMap_waypoints_dx() const;
-
-    const vector<double> &getMap_waypoints_dy() const;
 };
 
 

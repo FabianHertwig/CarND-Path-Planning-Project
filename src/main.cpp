@@ -34,7 +34,7 @@ string hasData(string s) {
 int main() {
     uWS::Hub h;
 
-    Path_planner pathPlanner(1, 49.0, 0.0, 0.3);
+    Path_planner pathPlanner;
     Map map;
 
     h.onMessage([&map, &pathPlanner](
@@ -78,8 +78,9 @@ int main() {
 
                     json msgJson;
 
-                    pathPlanner.set_speed(end_path_s, car_s, car_d, sensor_fusion);
-                    Path path = pathPlanner.get_stay_in_lane_path_smooth(car_x, car_y, car_yaw, car_s, car_d, previous_path, map);
+                    pathPlanner.set_speed(car_s, sensor_fusion);
+                    pathPlanner.consider_switch_lane(car_s, sensor_fusion);
+                    Path path = pathPlanner.get_smooth_path(car_x, car_y, car_yaw, car_s, previous_path, map);
 
                     msgJson["next_x"] = path.getMap_waypoints_x();
                     msgJson["next_y"] = path.getMap_waypoints_y();

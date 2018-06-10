@@ -16,16 +16,8 @@ const vector<double> &Path::getMap_waypoints_x() const {
     return map_waypoints_x;
 }
 
-void Path::setMap_waypoints_x(const vector<double> &map_waypoints_x) {
-    Path::map_waypoints_x = map_waypoints_x;
-}
-
 const vector<double> &Path::getMap_waypoints_y() const {
     return map_waypoints_y;
-}
-
-void Path::setMap_waypoints_y(const vector<double> &map_waypoints_y) {
-    Path::map_waypoints_y = map_waypoints_y;
 }
 
 void Path::push_back(const double x_val, const double y_val) {

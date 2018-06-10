@@ -31,10 +31,6 @@ Map::Map() {
 
 }
 
-double Map::getMax_s() const {
-    return max_s;
-}
-
 const vector<double> &Map::getMap_waypoints_x() const {
     return map_waypoints_x;
 }
@@ -47,10 +43,3 @@ const vector<double> &Map::getMap_waypoints_s() const {
     return map_waypoints_s;
 }
 
-const vector<double> &Map::getMap_waypoints_dx() const {
-    return map_waypoints_dx;
-}
-
-const vector<double> &Map::getMap_waypoints_dy() const {
-    return map_waypoints_dy;
-}

@@ -29,11 +29,7 @@ public:
 
     const vector<double> &getMap_waypoints_x() const;
 
-    void setMap_waypoints_x(const vector<double> &map_waypoints_x);
-
     const vector<double> &getMap_waypoints_y() const;
-
-    void setMap_waypoints_y(const vector<double> &map_waypoints_y);
 
     void push_back(const double x_val, const double y_val);
 
